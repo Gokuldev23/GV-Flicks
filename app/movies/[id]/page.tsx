@@ -1,4 +1,3 @@
-// app/movie/[id]/page.tsx
 import Image from "next/image";
 import { notFound } from "next/navigation";
 
@@ -59,8 +58,9 @@ interface Movie {
     credits: { crew: CrewMember[]; cast: CastMember[] };
 }
 
-export async function generateMetadata({ params }: { params: { id: string } }): Promise<{ title?: string; description?: string }> {
-    const res = await fetch(`https://api.themoviedb.org/3/movie/${params.id}?api_key=${TMDB_API_KEY}`);
+export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<{ title?: string; description?: string }> {
+    const { id } = await (params);
+    const res = await fetch(`https://api.themoviedb.org/3/movie/${id}?api_key=${TMDB_API_KEY}`);
     if (!res.ok) return {};
     const data: Movie = await res.json();
     return {
@@ -70,9 +70,11 @@ export async function generateMetadata({ params }: { params: { id: string } }): 
 }
 
 
-export default async function MoviePage({ params }: { params: { id: string } }) {
+export default async function MoviePage({ params }: { params: Promise<{ id: string }> }) {
+    const { id } = await (params);
+
     const movieRes = await fetch(
-        `https://api.themoviedb.org/3/movie/${params.id}?api_key=${TMDB_API_KEY}&append_to_response=videos,images,credits`
+        `https://api.themoviedb.org/3/movie/${id}?api_key=${TMDB_API_KEY}&append_to_response=videos,images,credits`
     );
 
     if (!movieRes.ok) return notFound();

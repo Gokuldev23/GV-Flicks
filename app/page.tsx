@@ -8,10 +8,10 @@ import { Suspense } from "react";
 export default async function MoviesPage({
   searchParams,
 }: {
-  searchParams?: { query?: string };
+  searchParams: Promise<{ [key: string]: string | undefined }>
 }) {
-  const params = searchParams
-  const query = params?.query || ""
+  const params = await searchParams
+  const query = params?.query|| ""
   console.log({ params })
   const movies = query
     ? searchMovies(query)
