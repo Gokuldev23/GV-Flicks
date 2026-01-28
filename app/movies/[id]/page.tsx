@@ -88,14 +88,12 @@ export default async function MoviePage({ params }: { params: Promise<{ id: stri
 
     return (
         <div className="min-h-screen bg-gradient-to-b from-gray-900 to-gray-800 text-white">
-            {/* Hero Section */}
             <div className="relative">
                 {movie.backdrop_path && (
                     <div className="absolute inset-0 bg-black/50 z-10" />
                 )}
                 <div className="container mx-auto px-4 py-16 relative z-20">
                     <div className="flex flex-col md:flex-row gap-8">
-                        {/* Poster */}
                         <div className="flex-shrink-0 w-full md:w-1/3 lg:w-1/4">
                             <Image
                                 src={posterUrl}
@@ -107,68 +105,7 @@ export default async function MoviePage({ params }: { params: Promise<{ id: stri
                             />
                         </div>
 
-                        {/* Movie Info */}
-                        <div className="space-y-4">
-                            <div className="flex items-center gap-4">
-                                <h1 className="text-4xl lg:text-5xl font-bold">{movie.title}</h1>
-                                {movie.release_date && (
-                                    <span className="text-2xl text-gray-300">
-                                        ({new Date(movie.release_date).getFullYear()})
-                                    </span>
-                                )}
-                            </div>
-
-                            <div className="flex flex-wrap gap-2">
-                                {movie.genres?.map((genre: Genre) => (
-                                    <span key={genre.id} className="px-3 py-1 bg-yellow-500/20 text-yellow-400 rounded-full text-sm">
-                                        {genre.name}
-                                    </span>
-                                ))}
-                            </div>
-
-                            <div className="flex items-center gap-4">
-                                <div className="flex items-center">
-                                    <StarIcon className="h-5 w-5 text-yellow-400" />
-                                    <span className="ml-1 font-bold">{movie.vote_average?.toFixed(1)}</span>
-                                    <span className="text-gray-400 text-sm ml-1">/10</span>
-                                </div>
-                                <span className="text-gray-300">{movie.runtime} min</span>
-                            </div>
-
-                            <p className="text-lg text-gray-300 max-w-3xl">{movie.overview}</p>
-
-                            {director && (
-                                <div>
-                                    <h3 className="text-gray-400">Director</h3>
-                                    <p className="font-medium">{director.name}</p>
-                                </div>
-                            )}
-
-                            {mainCast.length > 0 && (
-                                <div>
-                                    <h3 className="text-gray-400">Cast</h3>
-                                    <div className="flex flex-wrap gap-2">
-                                        {mainCast.map((person: CastMember) => (
-                                            <span key={person.id} className="text-gray-300">
-                                                {person.name}
-                                            </span>
-                                        ))}
-                                    </div>
-                                </div>
-                            )}
-
-                            {trailer && (
-                                <a
-                                    href={`https://www.youtube.com/watch?v=${trailer.key}`}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="inline-flex items-center px-6 py-3 bg-red-600 hover:bg-red-700 rounded-lg font-medium transition-colors"
-                                >
-                                    <PlayIcon className="h-5 w-5 mr-2" />
-                                    Watch Trailer
-                                </a>
-                            )}
-                        </div>
+                        <MovieInfo movie={movie} trailer={trailer} director={director} mainCast={mainCast}/>
                     </div>
                 </div>
             </div>
@@ -259,4 +196,80 @@ function PlayIcon(props: SVGProps<SVGSVGElement>) {
             <path fillRule="evenodd" d="M4.5 5.653c0-1.426 1.529-2.33 2.779-1.643l11.54 6.348c1.295.712 1.295 2.573 0 3.285L7.28 19.991c-1.25.687-2.779-.217-2.779-1.643V5.653z" clipRule="evenodd" />
         </svg>
     );
+}
+
+function MovieInfo({
+    movie,
+    trailer,
+    director,
+    mainCast,
+}: {
+    movie: Movie;
+    trailer?: Video;
+    director?: CrewMember;
+    mainCast: CastMember[];
+}) {
+    return(
+        <div className="space-y-4">
+            <div className="flex items-center gap-4">
+                <h1 className="text-4xl lg:text-5xl font-bold">{movie.title}</h1>
+                {movie.release_date && (
+                    <span className="text-2xl text-gray-300">
+                        ({new Date(movie.release_date).getFullYear()})
+                    </span>
+                )}
+            </div>
+
+            <div className="flex flex-wrap gap-2">
+                {movie.genres?.map((genre: Genre) => (
+                    <span key={genre.id} className="px-3 py-1 bg-yellow-500/20 text-yellow-400 rounded-full text-sm">
+                        {genre.name}
+                    </span>
+                ))}
+            </div>
+
+            <div className="flex items-center gap-4">
+                <div className="flex items-center">
+                    <StarIcon className="h-5 w-5 text-yellow-400" />
+                    <span className="ml-1 font-bold">{movie.vote_average?.toFixed(1)}</span>
+                    <span className="text-gray-400 text-sm ml-1">/10</span>
+                </div>
+                <span className="text-gray-300">{movie.runtime} min</span>
+            </div>
+
+            <p className="text-lg text-gray-300 max-w-3xl">{movie.overview}</p>
+
+            {director && (
+                <div>
+                    <h3 className="text-gray-400">Director</h3>
+                    <p className="font-medium">{director.name}</p>
+                </div>
+            )}
+
+            {mainCast.length > 0 && (
+                <div>
+                    <h3 className="text-gray-400">Cast</h3>
+                    <div className="flex flex-wrap gap-2">
+                        {mainCast.map((person: CastMember) => (
+                            <span key={person.id} className="text-gray-300">
+                                {person.name}
+                            </span>
+                        ))}
+                    </div>
+                </div>
+            )}
+
+            {trailer && (
+                <a
+                    href={`https://www.youtube.com/watch?v=${trailer.key}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center px-6 py-3 bg-red-600 hover:bg-red-700 rounded-lg font-medium transition-colors"
+                >
+                    <PlayIcon className="h-5 w-5 mr-2" />
+                    Watch Trailer
+                </a>
+            )}
+        </div>
+    )
 }
