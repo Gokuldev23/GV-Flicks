@@ -8,12 +8,13 @@ import MovieCard from "@/app/lib/components/ui/MovieCard";
 import WatchlistButton from "@/app/lib/components/ui/WatchlistButton";
 import { getImageUrl, formatDate, formatRuntime, formatCurrency, getRatingColor } from "@/app/lib/utils";
 import type { Movie, Video, CastMember, CrewMember } from "@/app/lib/types";
+import { getBaseUrl } from "@/app/lib/utils/getBaseUrl";
 
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<{ title?: string; description?: string }> {
   const { id } = await params;
-  
+  const baseUrl = await getBaseUrl();
   try {
-    const res = await fetch(`http://localhost:3000/api/movies/${id}`, {
+    const res = await fetch(`${baseUrl}/api/movies/${id}`, {
       cache: 'no-store'
     });
     if (!res.ok) return {};
@@ -29,8 +30,9 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
 
 export default async function MoviePage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
+  const baseUrl = await getBaseUrl();
 
-  const movieRes = await fetch(`http://localhost:3000/api/movies/${id}`, {
+  const movieRes = await fetch(`${baseUrl}/api/movies/${id}`, {
     cache: 'no-store'
   });
 
