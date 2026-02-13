@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
-import { Inter } from 'next/font/google';
-import { Toaster } from 'react-hot-toast';
+import { Inter } from "next/font/google";
+import { Toaster } from "react-hot-toast";
 import "./globals.css";
+import { GoogleTagManager } from "@next/third-parties/google";
 
-const inter = Inter({ subsets: ['latin'] });
+const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "GV-Flicks",
@@ -18,25 +19,28 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${inter.className} antialiased bg-gradient-to-b from-gray-900 to-gray-800`}>
+      <body
+        className={`${inter.className} antialiased bg-gradient-to-b from-gray-900 to-gray-800`}
+      >
         {children}
         <Toaster
           position="top-right"
           toastOptions={{
             duration: 3000,
             style: {
-              background: '#1f2937',
-              color: '#fff',
-              border: '1px solid #374151',
+              background: "#1f2937",
+              color: "#fff",
+              border: "1px solid #374151",
             },
             success: {
               iconTheme: {
-                primary: '#eab308',
-                secondary: '#000',
+                primary: "#eab308",
+                secondary: "#000",
               },
             },
           }}
         />
+        <GoogleTagManager gtmId="GTM-2WMMYXBEMC" />
       </body>
     </html>
   );
