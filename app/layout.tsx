@@ -40,7 +40,7 @@ export default function RootLayout({
             },
           }}
         />
-        <GoogleTagManager gtmId="GTM-2WMMYXBEMC" />
+        <GoogleTagManager gtmId="G-2WMMYXBEMC" />
       </body>
     </html>
   );
